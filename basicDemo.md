@@ -25,18 +25,23 @@ and is theoretically unique to your network adapter.  your IP address is how the
 5. stop packet capture with wireshark
 
 You have a lot of packets in wireshark now.  The protocol column shows you things like ICMP, TCP, TLS, etc.
-This is a lot of information.  We want to actually see what happened, so we need to filter:
-- `ping` uses the ICMP protocol, so in the filter box (just below the toolbar buttons) type `icmp` and press enter.
+This is a lot of information.  We want to actually see what happened, so we need to filter.  `ping` uses the ICMP protocol:
 
-You should see a series of packets where the source and desination addresses include your IP and some other IP.
+6. In the filter box (just below the toolbar buttons) type `icmp` and press enter.
+
+You should see a series of packets which are all the same color and protocol.  The source and desination addresses include your IP and some other IP.
+
 Whose IP address is that?  You can probably make a good guess, but if you want to know for sure, you can use `dig`:
-- `dig -x [IP]` will perform a reverse DNS lookup (i.e., find the domain name for a given IP address
+
+7. Perform a reverse DNS lookup (i.e., find the domain name for a given IP address):
+- `dig -x [IP]` (`-x` is the reverse part of the DNS lookup)
 - for 'dig -x 172.217.23.36` I see *lhr35s02-in-f36.1e100.net*.  What the heck is that?  I cheat and take that to WolframAlpha,
 which tells me it belongs to Google.
-- we could go the other way and do a DNS lookup with `dig www.google.com` (note, no `-x` flag).  
-I get 172.217.23.36 back, which confirms our answer.
+- we could go the other way and do a DNS lookup with `dig www.google.com` (note, no `-x` flag).  I get 172.217.23.36 back, which confirms our answer.
 
-Back to wireshark.  Now we know these ICMP packet are going back and forth between us and www.google.com, which is not surprising, since that's what we were hoping would happen with the `ping`.  Select any frame, if not selected already.  In the bottom half of the wireshark window, you should see the collapsed packet summary.  Mine shows:
+Back to wireshark.  Now we know these ICMP packet are going back and forth between us and www.google.com, which is not surprising, since that's what we were hoping would happen with the `ping`.  
+
+8. Select any frame, if not selected already.  In the bottom half of the wireshark window, you should see the collapsed packet summary.  Mine shows:
 - *Frame2*
 - *Ethernet II*
 - *Internet Protocol Version 4*
@@ -44,14 +49,16 @@ Back to wireshark.  Now we know these ICMP packet are going back and forth betwe
 
 Hopefully this looks like a stack to you, with the lowest layer (the actual bits on the wire) on top and the highest layer protocol (ICMP) on the bottom (kind of upside down...).
 
-Double click any frame and another window opens.  The top half should look like the bottom half of the original window.  The bottom half actually shows you the contents of the packet you selected in hex and (probably) ASCII (though by default it picks an encoding it thinks will be most readable based on the packet content).
+9. Double click any frame and another window opens.  The top half should look like the bottom half of the main window.  The bottom half actually shows you the contents of the packet you selected in hex and (probably) ASCII (though by default it picks an encoding it thinks will be most readable based on the packet content).
 
-In the new window, expand *Ethernet II*.  You should see part of the hex highlighted in the lower window.  This is the header for the Ethernet frame.  The datalink layer considers everything else in the packet to be payload, which shows the concept of **encapsulation** or **embedding**.  You should also see your MAC address directly encoded in the hex, which is nice.
+10. In the new window, expand *Ethernet II*.  You should see part of the hex highlighted in the lower window.  This is the header for the Ethernet frame.  The datalink layer considers everything else in the packet to be payload, which shows the concept of **encapsulation** or **embedding**.  You should also see your MAC address directly encoded in the hex, which is nice.
 
-You shold see source and destination MAC addresses, and one of them should match yours.  The other MAC address belongs to the node at the other end of your current datalink layer link (most likely a router).  We'll dig into that later.  For now, it's sufficient to recognize that the datalink layer is associated with your local, shared media, multiple access network, so you're communicating with your local router, which can then send your packet off to www.google.com (or route a packet from www.google.com back to you).  You *physically* know where your router is and your router *physically* knows where you are.  You have no idea where www.google.com *physically* is.
+You should see source and destination MAC addresses, and one of them should match yours.  The other MAC address belongs to the node at the other end of your current datalink layer link (most likely a router).  We'll dig into that later.  For now, it's sufficient to recognize that the datalink layer is associated with your local, shared media, multiple access network, so you're communicating with your local router, which can then send your packet off to www.google.com (or route a packet from www.google.com back to you).
 
-Expand *Internet Protocol Version 4*.  Again, you'll see part of the packet highlighted, which shows the IP header.  The network layer considers everything else in the packet to be payload.  If you decoded the hex, you would find that part of this header matched your IP address and the other part matched that for www.google.com.  The top part of the window does this decoding for you.
+The datalink layer used to represent multiple, shared access, so everyone could talk to everyone else at that layer.  You can think of the datalink layer as the devices physically conneted to one another, so you know where evyerone is and can talk to anyone to whom you're connected.  With wired Ethernet, this is actually true.  With wireless, it's mor eof an analogy.  Anyway, you're directly connected to your router.  You're not only not directly connected to www.google.com, but you're probably not connected to someone who is connected to www.google.com.  One step at a time, though.  We address an Ethernet frame to our router, with www.google.com's IP address, and hope the router can figure out how to go the rest of the way.
 
-Finally, expand *Internet Control Message Protocol*.  This is the rest of the packet.  Some interesting things to note:  You can click through the relevant parts of the packet (e.g., *Type*, *Timestamp*) and see they only take up a few bytes.  What is the rest for?  It's mostly padding.  Ethernet frames have a minmum payload size to ensure CSMA/CD works.  The payload here has to be filled out to 48 bytes.
+11. Expand *Internet Protocol Version 4*.  Again, you'll see part of the packet highlighted, which shows the IP header.  The network layer considers everything else in the packet to be payload.  If you decoded the hex, you would find that part of this header matched your IP address and the other part matched that for www.google.com.  The top part of the window does this decoding for you.
+
+12. Finally, expand *Internet Control Message Protocol*.  This is the rest of the packet.  Some interesting things to note:  You can click through the relevant parts of the packet (e.g., *Type*, *Timestamp*) and see they only take up a few bytes.  What is the rest for?  It's mostly padding.  Ethernet frames have a minmum payload size to ensure CSMA/CD works.  The payload here has to be filled out to 48 bytes.
 
 Fin.
