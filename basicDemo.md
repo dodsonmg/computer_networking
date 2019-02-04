@@ -35,7 +35,7 @@ Whose IP address is that?  You can probably make a good guess, but if you want t
 
 7. Perform a reverse DNS lookup (i.e., find the domain name for a given IP address):
 - `dig -x [IP]` (`-x` is the reverse part of the DNS lookup)
-- for 'dig -x 172.217.23.36` I see *lhr35s02-in-f36.1e100.net*.  What the heck is that?  I cheat and take that to WolframAlpha,
+- for `dig -x 172.217.23.36` I see *lhr35s02-in-f36.1e100.net*.  What the heck is that?  I cheat and take that to WolframAlpha,
 which tells me it belongs to Google.
 - we could go the other way and do a DNS lookup with `dig www.google.com` (note, no `-x` flag).  I get 172.217.23.36 back, which confirms our answer.
 
