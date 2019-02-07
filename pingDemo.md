@@ -1,4 +1,4 @@
-## Understand the Internet Protocol stack
+## Understand the Internet Protocol stack using ping and wireshark
 
 ### Prerequisites:
 
@@ -9,7 +9,7 @@ Quick start guide:
 - If it asks you to select an interface, you probably want to select *Wi-Fi:en0*
 - When you're done capturing, press the stop button (red square) (or command + e) again
 
-### Demo 1:  `ping`
+### Demo:
 1. open a terminal window
 2. find your own IP and MAC address.  your MAC address is part of the link layer communication between you and your router 
 and is theoretically unique to your network adapter.  your IP address is how the rest of the interenet finds you.
