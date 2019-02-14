@@ -14,8 +14,8 @@ Quick start guide:
 2. find your own IP and MAC address.  your MAC address is part of the link layer communication between you and your router 
 and is theoretically unique to your network adapter.  your IP address is how the rest of the interenet finds you.
   - type `ifconfig` and find the `en0` segment, or simply type `ifconfig en0`
-  - your IP address is next to `inet` and your MAC address i snext to `ether`
-    - my IP address today is 10.248.117.87
+  - your IP address is next to `inet` and your MAC address is next to `ether`
+    - my IP address today is 10.248.117.87 (this is behind a NAT, which we'll discuss another time)
     - my MAC address always is f0:18:98:60:61:99
   - write them down, or leave this terminal window open for reference and use another for the steps below
 3. start packet capture with wireshark
