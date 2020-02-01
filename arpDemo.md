@@ -1,4 +1,4 @@
-## Understand the Internet Protocol stack using ping and wireshark
+## Understand the Internet Protocol stack using arp and wireshark
 
 ### Prerequisites:
 
@@ -15,9 +15,20 @@ Quick start guide:
 and is theoretically unique to your network adapter.  your IP address is how the rest of the interenet finds you.
   - type `ifconfig` and find the `en0` segment, or simply type `ifconfig en0`
   - your IP address is next to `inet` and your MAC address is next to `ether`
-    - my IP address today is 10.248.117.87 (this is behind a NAT, which we'll discuss another time)
+    - my IP address today is 10.248.117.87 (this is behind a NAT, which we'll discuss later)
     - my MAC address always is f0:18:98:60:61:99
   - write them down, or leave this terminal window open for reference and use another for the steps below
+3. check your current arp table:
+  - type `arp -a`
+  - you should see a list of hostnames, IP addresses and MAC addresses
+    - e.g., `c0525.int.cl.cam.ac.uk (128.232.86.13) at d0:d2:b0:19:c8:30`
+    - this is everything your computer knows how to contact at the link layer (e.g., over a direct copper or RF connection)
+4. clear your arp table:
+  - type `sudo arp -a -d`, and enter your password, if necessary
+
+
+--- Copied from ping, will eventually delete or move up ---
+
 3. start packet capture with wireshark
 4. in the terminal window
   - type `ping www.google.com`
